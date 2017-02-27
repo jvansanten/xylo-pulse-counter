@@ -21,22 +21,30 @@ int main(int argc, char const *argv[]) {
   std::vector<__int64> stats(length,0);
   int err;
   // err = FPGA_Counts(false, FPGA_CLEAR, "data.dat", stats.data(), data, &length, runs);
-  FPGA_Counts(false, FPGA_ENABLE+FPGA_GETDATA, NULL, stats.data(), data, &length, 0);
+  // length = runs*64;
+  FPGA_Counts(false, FPGA_ENABLE+FPGA_GETDATA+FPGA_CLEAR, NULL, stats.data(), data, &length, runs);
   size_t count0 = stats[1];
   size_t t0 = stats[0];
+
+  count0 = 0;
+  t0 = 0;
+  // std::cout << length << " " << t0 << std::endl;
+  // return 0;
   //  USB_Close();
   for (int i=0; i < 10; i++) {
     // USB_Open();
     length = runs*64;
-    // memset(stats.data(), sizeof(double)*stats.size(), 0);
+    std::vector<__int64> stats(length,0);
+
+    //memset(stats.data(), sizeof(double)*stats.size(), 0);
     err = FPGA_Counts(false, FPGA_GETDATA, "data.dat", stats.data(), data, &length, runs);
-    FPGA_Counts(false, FPGA_CLEAR, NULL, stats.data(), data, &length, 0);
+    //FPGA_Counts(false, FPGA_CLEAR, NULL, stats.data(), data, &length, 0);
     // USB_Close();
 
-    double dt = stats[0]/48e6;
-    std::cout << stats[1]-count0 << " Hz " << stats[1] << " " << stats[0]-t0 << std::endl;
-    count0 = stats[1];
-    t0 = stats[0];
+    double dt = stats[0]/48e6/2;
+    std::cout << (stats[1]-count0)/dt << " Hz " << stats[1] << " " << stats[0]-t0 << std::endl;
+    // count0 = stats[1];
+    // t0 = stats[0];
     // std::cout << "In " << stats[0]/48e6 << " clicks: " << stats[1] << "/" << stats[2] << " counts" << std::endl;
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(1s);
