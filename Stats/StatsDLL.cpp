@@ -63,7 +63,7 @@ int USB_Open(){
 	if(USBDevice == NULL){
 		//std::cout << "Creating USBDevice." << std::endl;
 		//debugLog << "Creating USBDevice." << std::endl;
-		USBDevice = new CCyUSBDevice(NULL, GUID_CYUSB_FX2,true);
+		USBDevice = new CCyUSBDevice(NULL, GUID_KNJN_FX2,true);
 		return 0;
 	}
 	else{
