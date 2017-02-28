@@ -76,7 +76,7 @@
 // Read TRM p.15-115 for an explanation on this. 
 // A single nop is sufficient for default setup but like that we're on 
 // the safe side. 
-#define	NOP		_asm nop _endasm
+#define	NOP		__asm nop __endasm
 #define	SYNCDELAY	NOP; NOP; NOP; NOP
 
 
@@ -167,7 +167,7 @@ static void Initialize(void)
 
 static void ProcessEP1Data(void)
 {
-	xdata const unsigned char *src=EP1OUTBUF;
+	__xdata const unsigned char *src=EP1OUTBUF;
 	unsigned int len = EP1OUTBC;
 	unsigned int i;
 
