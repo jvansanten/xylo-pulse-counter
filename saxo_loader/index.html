@@ -1,0 +1,77 @@
+<HTML>
+<HEAD><TITLE>KNJN Saxo on Linux</TITLE></HEAD>
+<BODY>
+<CENTER><H3>KNJN Saxo on Linux</H3></CENTER>
+<CENTER><H4>by Brent Baccala</H4></CENTER>
+
+The <a HREF="http://www.knjn.com/">KNJN</A> <A
+HREF="http://www.knjn.com/FPGA-FX2.html">Saxo</A> is a USB-attached
+FPGA with a variety of uses.  This webpage is devoted to using the
+Saxo from Linux.
+
+<P>
+The Saxo is based around two chips: the FX2, which is an 8051-based
+USB-2 device and an <A HREF="http://www.altera.com/">Altera</A> <A
+HREF="http://www.altera.com/products/devices/cyclone/cyc-index.jsp">Cyclone</A>
+FPGA.  Linux work with the FX2 is best done using the <A
+HREF="http://sdcc.sourceforge.net">sdcc</A> cross compiler (available
+on Debian Linux; but only the non-free <TT>sdcc-nf</TT> package supports the
+8051 architecture) coupled with Wolfgang Wieser's toolset, most
+importantly <A
+HREF="http://www.triplespark.net/elec/periph/USB-FX2/software/"><TT>cycfx2prog</TT></A>
+(at least version 0.46) and <A
+HREF="http://www.triplespark.net/elec/periph/USB-FX2/software/local_examples.html"><TT>usb-fx2-local-examples</TT></A>
+(you need at least the include files).
+
+<P>
+All of the <TT>usb-fx2-local-examples</TT> work unmodified on the
+Saxo, since they just use the FX2 without the FPGA.  To use the FPGA,
+you'll also need <A
+HREF="saxo_loader-1.0.tgz"><TT>saxo_loader</TT></A>.  Unpack the
+program into to same directory you unpacked
+<TT>usb-fx2-local-examples</TT>, cross-compile it using make/sdcc,
+then boot load it over USB using cycfx2prog.  Upon initialization, it
+resets the FPGA and places it into its Passive Serial configuration
+mode.  Anything received by bulk transfer over endpoint 1 (which
+should be an Altera .rbf file) is then clocked out to the FPGA's
+configuration pins.  It also puts endpoints 2, 4, 6, and 8 into the
+default configuration documented in the Saxo manual, which presents
+them as FIFO buffers to the FPGA.  It has been tested with the
+LEDblink, LEDglow, FX2_LEDs, and FX2_bidir examples from the Saxo
+Startup Kit.
+
+<P>
+The code does not (directly) support programming the Saxo's EEPROMs.
+Doing so would require loading an FPGA bitfile that implemented an I2C
+controller (to program the FX2's optional EEPROM) and/or something to
+implement Altera's EPCS protocol (to program the FPGA's EEPROM).  This
+should be doable with little modification to saxo_loader.  However, to
+load the FPGA from its EEPROM, the program would have to be modified
+to put the FPGA into Active Serial configuration mode upon startup.
+See the source code for more detail.
+
+<P>
+The code is covered under version 2 of the GNU General Public License.
+
+<H3>Usage example</H3>
+<P>
+ (<TT>FX2_bidir_SaxoXylo.rbf</TT> is from the Saxo Startup Kit)
+<P>
+<PRE>
+   cycfx2prog prg:saxo_loader.ihx run fbulk:1,FX2_bidir_SaxoXylo.rbf
+   cycfx2prog "sbulk:2,This is a test"
+   cycfx2prog dbulk:6,-512
+</PRE>
+
+<P>
+<TT>FX2_bidir_SaxoXylo</TT> programs the FPGA to count characters, so the
+last command should return a character count of 0x0e.
+
+<H3>Version History</H3>
+
+<A HREF="saxo_loader-1.0.tgz"><TT>saxo_loader-1.0.tgz</TT></A>
+&nbsp; &nbsp; &nbsp; &nbsp;
+July 16, 2009
+
+</BODY>
+</HTML>
