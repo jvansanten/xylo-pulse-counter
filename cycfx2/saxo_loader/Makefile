@@ -6,8 +6,11 @@ CYCFX2PROG = cycfx2prog
 $(BASENAME).ihx: $(BASENAME).c
 	$(CC) $(INCLUDES) $(BASENAME).c
 
-clean:
-	rm -f $(BASENAME).{asm,ihx,lnk,lst,map,mem,rel,rst,sym}
+tidy:
+	rm -f $(BASENAME).{asm,lnk,lst,map,mem,rel,rst,sym,lk}
+
+clean: tidy 
+	rm -f $(BASENAME).ihx
 
 .PHONY:run
 run: $(BASENAME).ihx

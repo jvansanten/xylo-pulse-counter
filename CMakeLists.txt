@@ -22,3 +22,13 @@ add_executable(cycfx2prog
 
 target_compile_definitions(cycfx2prog PRIVATE -DCYCFX2PROG_VERSION=\"0.47\")
 target_link_libraries(cycfx2prog ${LIBUSB_LIBRARY})
+
+find_program(SDCC sdcc)
+if(SDCC)
+  message(STATUS "+ sdcc: ${SDCC}")
+  add_custom_target(saxo_loader.ihx
+    COMMAND make && make tidy && mv saxo_loader.ihx ${CMAKE_BINARY_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cycfx2/saxo_loader
+  )
+endif()
+
