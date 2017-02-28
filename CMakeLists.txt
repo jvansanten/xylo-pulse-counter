@@ -16,8 +16,8 @@ endif ()
 include_directories(${LIBUSB_INCLUDE_DIR})
 
 add_executable(cycfx2prog
-  cycfx2/cycfx2prog.cc
-  cycfx2/cycfx2dev.cc
+  cycfx2/cycfx2prog/cycfx2prog.cc
+  cycfx2/cycfx2prog/cycfx2dev.cc
 )
 
 target_compile_definitions(cycfx2prog PRIVATE -DCYCFX2PROG_VERSION=\"0.47\")
