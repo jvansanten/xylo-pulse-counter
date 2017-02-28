@@ -28,10 +28,6 @@
 # error CYCFX2PROG_VERSION undefined
 #endif
 
-// Global FX2 device we're connected to. 
-CypressFX2Device cycfx2;
-
-
 static void *CheckMalloc(void *ptr)
 {
 	if(!ptr)
@@ -258,6 +254,7 @@ int main(int argc,char **arg)
 		usbdev->descriptor.idVendor,usbdev->descriptor.idProduct,
 		usbdev->bus->dirname,usbdev->filename);
 	
+	CypressFX2Device cycfx2;
 	if(cycfx2.open(usbdev))
 	{  return(1);  }
 	
