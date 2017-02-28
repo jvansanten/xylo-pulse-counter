@@ -18,7 +18,7 @@
 // Read TRM p.15-115 for an explanation on this. 
 // A single nop is sufficient for default setup but like that we're on 
 // the safe side. 
-#define	NOP		_asm nop _endasm
+#define	NOP		__asm nop __endasm
 #define	SYNCDELAY	NOP; NOP; NOP; NOP
 
 
@@ -52,7 +52,7 @@ static void SetUpBufToTransfer(void)
 	static unsigned char serial=0;
 	
 	// First, copy the data into the EP6 buffer. 
-	xdata unsigned char *dest=EP6FIFOBUF;
+	__xdata unsigned char *dest=EP6FIFOBUF;
 	const char *src=
 		"Hello world! Your FX2 is talking to you via the USB line. ";
 	unsigned char len=0;
