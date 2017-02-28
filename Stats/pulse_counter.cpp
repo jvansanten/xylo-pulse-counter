@@ -41,7 +41,7 @@ int main(int argc, char const *argv[]) {
     //FPGA_Counts(false, FPGA_CLEAR, NULL, stats.data(), data, &length, 0);
     // USB_Close();
 
-    double dt = stats[0]/48e6/2;
+    double dt = stats[0]/48e6;
     std::cout << (stats[1]-count0)/dt << " Hz " << stats[1] << " " << stats[0]-t0 << std::endl;
     // count0 = stats[1];
     // t0 = stats[0];
