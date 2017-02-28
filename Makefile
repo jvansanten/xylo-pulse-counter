@@ -1,8 +1,8 @@
 VERSION = 0.47
-LIBUSB_ROOT = /usr/local/Cellar/libusb/1.0.21
+LIBUSB_ROOT = /usr/local/opt/libusb-compat
 CFLAGS = -O2 -fno-rtti -fno-exceptions -DCYCFX2PROG_VERSION=\"$(VERSION)\" \
-	-W -Wall -Wformat -I$(LIBUSB_ROOT)/include/libusb-1.0
-LDFLAGS = -lusb -L$(LIBUSB_ROOT)/lib/libusb-1.0
+	-W -Wall -Wformat -I$(LIBUSB_ROOT)/include
+LDFLAGS = -lusb -L$(LIBUSB_ROOT)/lib
 DIST_DEST = cycfx2prog-$(VERSION)
 
 all: cycfx2prog
