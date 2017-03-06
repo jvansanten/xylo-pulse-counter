@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.1.0)
 
 project(PulseCounter CXX)
+set(CMAKE_CXX_STANDARD 14)
+
 
 find_path(LIBUSB_INCLUDE_DIR usb.h)
 find_library(LIBUSB_LIBRARY usb)
@@ -23,12 +25,20 @@ add_executable(cycfx2prog
 target_compile_definitions(cycfx2prog PRIVATE -DCYCFX2PROG_VERSION=\"0.47\")
 target_link_libraries(cycfx2prog ${LIBUSB_LIBRARY})
 
+add_executable(pulse_counter
+  cycfx2/cycfx2prog/pulse_counter.cpp
+  cycfx2/cycfx2prog/cycfx2dev.cc
+  )
+target_link_libraries(pulse_counter ${LIBUSB_LIBRARY})
+
 find_program(SDCC sdcc)
 if(SDCC)
   message(STATUS "+ sdcc: ${SDCC}")
-  add_custom_target(saxo_loader.ihx
-    COMMAND make && make tidy && mv saxo_loader.ihx ${CMAKE_BINARY_DIR}
+  add_custom_target(xylo_setup.ihx
+    COMMAND make xylo_setup.ihx && make tidy && mv xylo_setup.ihx ${CMAKE_BINARY_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cycfx2/saxo_loader
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/cycfx2/saxo_loader/xylo_setup.c
   )
+  add_dependencies(pulse_counter xylo_setup.ihx)
 endif()
 
