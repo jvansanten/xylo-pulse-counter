@@ -58,6 +58,9 @@ static const char* xylo_setup[] = {
 class PulseCounter : private CypressFX2Device {
 public:
 	PulseCounter() {
+		usb_find_busses();
+		usb_find_devices();
+		// find the first FX2 attached
 		struct usb_device *usbdev = USBFindDevice(0x4b4,0x8613);
 		assert(usbdev);
 		CypressFX2Device::open(usbdev);
