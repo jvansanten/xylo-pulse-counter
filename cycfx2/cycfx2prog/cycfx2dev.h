@@ -77,10 +77,10 @@ class CypressFX2Device
 		// endpoint must be address (like 0x86 for EP 6 in). 
 		// Returns number of read bytes. See source comment!!
 		int BlockRead(int endpoint,unsigned char *buf,size_t nbytes,
-			char type='b');
+			char type='b', unsigned timeout=1000);
 		// Counterpart for BlockRead; type is 'b' or 'i' but not 'B'/'I'. 
 		int BlockWrite(int endpoint,const unsigned char *buf,size_t nbytes,
-			char type='b');
+			char type='b', unsigned timeout=1000);
 		// Returns number of written bytes. See source comment!!
 		
 		// Benchmark block (bulk/interrupt) reading. 

@@ -57,7 +57,7 @@ struct usb_device *USBFindDevice(int vendor,int product,int nth)
 //------------------------------------------------------------------------------
 
 int CypressFX2Device::BlockRead(int endpoint,unsigned char *buf,size_t nbytes,
-	char type)
+	char type, unsigned timeout)
 {
 	// FIXME: This function is somewhat bugged concerning reliable delivery 
 	//        and correct handling of return values for short reads and . 
@@ -101,11 +101,9 @@ int CypressFX2Device::BlockRead(int endpoint,unsigned char *buf,size_t nbytes,
 			size_t bs = left>chunk_size ? chunk_size : left;
 			ssize_t rv;
 			if(type=='i')
-			{  rv=usb_interrupt_read(usbhdl,endpoint,(char*)buf,bs,
-				/*timeout=*/1000/*msec*/);  }
+			{  rv=usb_interrupt_read(usbhdl,endpoint,(char*)buf,bs,timeout); }
 			else
-			{  rv=usb_bulk_read(usbhdl,endpoint,(char*)buf,bs,
-				/*timeout=*/1000/*msec*/);  }
+			{  rv=usb_bulk_read(usbhdl,endpoint,(char*)buf,bs,timeout); }
 			++ncalls;
 			if(rv<0)
 			{
@@ -139,7 +137,7 @@ int CypressFX2Device::BlockRead(int endpoint,unsigned char *buf,size_t nbytes,
 
 
 int CypressFX2Device::BlockWrite(int endpoint,const unsigned char *buf,
-	size_t nbytes,char type)
+	size_t nbytes,char type,unsigned timeout)
 {
 	// FIXME: This function is somewhat bugged concerning reliable delivery 
 	//        and correct handling of return values for short writes and . 
@@ -180,11 +178,9 @@ int CypressFX2Device::BlockWrite(int endpoint,const unsigned char *buf,
 			size_t bs = left>chunk_size ? chunk_size : left;
 			ssize_t rv;
 			if(type=='i')
-			{  rv=usb_interrupt_write(usbhdl,endpoint,(char*)buf,bs,
-				/*timeout=*/1000/*msec*/);  }
+			{  rv=usb_interrupt_write(usbhdl,endpoint,(char*)buf,bs,timeout); }
 			else
-			{  rv=usb_bulk_write(usbhdl,endpoint,(char*)buf,bs,
-				/*timeout=*/1000/*msec*/);  }
+			{  rv=usb_bulk_write(usbhdl,endpoint,(char*)buf,bs,timeout); }
 			++ncalls;
 			if(rv<0)
 			{
