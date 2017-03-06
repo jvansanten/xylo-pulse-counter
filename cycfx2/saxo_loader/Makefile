@@ -3,8 +3,8 @@ CC = sdcc -mmcs51
 BASENAME = saxo_loader
 CYCFX2PROG = cycfx2prog
 
-$(BASENAME).ihx: $(BASENAME).c
-	$(CC) $(INCLUDES) $(BASENAME).c
+%.ihx: %.c
+	$(CC) $(INCLUDES) $<
 
 tidy:
 	rm -f $(BASENAME).{asm,lnk,lst,map,mem,rel,rst,sym,lk}
