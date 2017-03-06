@@ -1,6 +1,6 @@
 INCLUDES = -I../include
 CC = sdcc -mmcs51
-BASENAME = saxo_loader
+BASENAME = xylo_setup
 CYCFX2PROG = cycfx2prog
 
 %.ihx: %.c
