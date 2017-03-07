@@ -10,7 +10,10 @@
 #include "cycfx2dev.h"
 
 enum FPGACommand {
-	FPGA_NO_CHANGE = 0,
+	// if the FPGA_GETDATA bit is not set, the internal command pipeline enters
+	// a deadlock state where command packets are no longer read from the EP2
+	// FIFO until the board is power-cycled. Disable these
+	// FPGA_NO_CHANGE = 0,
 	// FPGA_CLEAR = 1,
 	FPGA_DISABLE = 2,
 	FPGA_ENABLE = 4,
@@ -30,6 +33,7 @@ struct count_statistics {
 	count_statistics() : counts(4,0), cycles(0) {};
 };
 
+// Intel hex bytecode generated from cycfx2/saxo_loader/xylo_setup.c
 static const char* xylo_setup[] = {
 	":03000000020006F5\n",
 	":03005F0002000399\n",

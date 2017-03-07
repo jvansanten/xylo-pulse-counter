@@ -42,7 +42,11 @@ pycounter_count(pycounter* self, PyObject* args, PyObject* kwds){
 
 static PyMethodDef pycounter_methods[] = {
 	{"count", (PyCFunction)pycounter_count, 0,
-	 "Get counts"},
+	 "Read out and reset the FPGA scalers\n\n"
+	 ":returns: a tuple (counts,ticks), where the `counts` are the number of\n"
+	 "          pulses detected on each channel in the last `ticks` clock\n"
+	 "          cycles. The clock frequency is nominally 48 MHz, but you\n"
+	 "          should probably calibrate it with a function generator"},
 	 NULL
 };
 
@@ -99,7 +103,7 @@ initpulse_counter(void){
 		return;
 	
 	module = Py_InitModule3("pulse_counter", NULL,
-	                        "docs go here");
+	                        "Front-end for an FPGA-based pulse counter");
 	Py_INCREF(&pycounterType);
 	PyModule_AddObject(module, "PulseCounter", (PyObject*)&pycounterType);
 	
