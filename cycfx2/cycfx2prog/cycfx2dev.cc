@@ -546,6 +546,15 @@ int CypressFX2Device::open(struct usb_device *_usbdev)
 	if(!usbhdl)
 	{  fprintf(stderr,"Failed to open device: %s\n",usb_strerror());
 		return(1);  }
+#ifdef __linux__
+	if(usb_claim_interface(usbhdl,0)<0) {
+		if(usb_detach_kernel_driver_np(usbhdl,0)<0)
+		{  fprintf(stderr,"Failed to detach kernel driver from interface %d: %s\n",0,usb_strerror());
+			return(1);  }
+	} else {
+		usb_release_interface(usbhdl,0);
+	}
+#endif
 	return(0);
 }
 
