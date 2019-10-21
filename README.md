@@ -23,12 +23,16 @@ over USB.
 
 To build the driver, you will need:
 
-* CMake (> 3.1)
+* A POSIX-compliant operating system
+* CMake (>= 3.1)
 * A c++14-compliant compiler
+* libusb-compat (libusb 0.1 compatibility layer)
 * Python
 
-After unpacking the source, build `cmake . && make`. The script
-`test_pulsecounter.py` illustrates how to use the Python interface.
+After unpacking the source, build with `cmake . && make`. This will build both
+the command-line client `pulse-counter` and the Python extension
+`pulse_counter.so`. The script `test_pulsecounter.py` illustrates how to use
+the Python extension.
 
 ## Acknowledgements
 

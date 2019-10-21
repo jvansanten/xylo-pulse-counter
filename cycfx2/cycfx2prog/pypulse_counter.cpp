@@ -91,21 +91,60 @@ static PyTypeObject pycounterType = {
     pycounter_new,             /* tp_new */
 };
 
-#ifndef PyMODINIT_FUNC	/* declarations for DLL import/export */
-#define PyMODINIT_FUNC void
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "pulse_counter",     /* m_name */
+    "Front-end for an FPGA-based pulse counter",  /* m_doc */
+    -1,                  /* m_size */
+    NULL,                /* m_methods */
+    NULL,                /* m_reload */
+    NULL,                /* m_traverse */
+    NULL,                /* m_clear */
+    NULL,                /* m_free */
+};
 #endif
-PyMODINIT_FUNC
-initpulse_counter(void){
-	PyObject* module;
-	
-	// pycounterType.tp_new = PyType_GenericNew;
-	if (PyType_Ready(&pycounterType) < 0)
-		return;
-	
-	module = Py_InitModule3("pulse_counter", NULL,
-	                        "Front-end for an FPGA-based pulse counter");
-	Py_INCREF(&pycounterType);
-	PyModule_AddObject(module, "PulseCounter", (PyObject*)&pycounterType);
-	
-	usb_init();
+
+#if PY_MAJOR_VERSION >= 3
+#define MOD_DEF(ob, name, doc, methods) \
+    static struct PyModuleDef moduledef = { \
+        PyModuleDef_HEAD_INIT, name, doc, -1, methods, }; \
+    ob = PyModule_Create(&moduledef);
+#else
+#define MOD_DEF(ob, name, doc, methods) \
+    ob = Py_InitModule3(name, methods, doc);
+#endif
+
+static PyObject *
+moduleinit(void)
+{
+    PyObject *module;
+
+    if (PyType_Ready(&pycounterType) < 0)
+        return NULL;
+    MOD_DEF(module, "pulse_counter",
+            "Front-end for an FPGA-based pulse counter",
+            NULL)
+
+    if (module == NULL)
+        return NULL;
+
+    Py_INCREF(&pycounterType);
+    PyModule_AddObject(module, "PulseCounter", (PyObject*)&pycounterType);
+
+    usb_init();
+
+    return module;
 }
+
+#if PY_MAJOR_VERSION < 3
+PyMODINIT_FUNC initpulse_counter(void)
+{
+    moduleinit();
+}
+#else
+PyMODINIT_FUNC PyInit_pulse_counter(void)
+{
+    return moduleinit();
+}
+#endif
