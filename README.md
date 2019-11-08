@@ -26,7 +26,9 @@ To build the driver, you will need:
 * A POSIX-compliant operating system
 * CMake (>= 3.1)
 * A c++14-compliant compiler
-* libusb-compat (libusb 0.1 compatibility layer)
+* libusb 0.1
+  - On OSX (homebrew), `brew install libusb-compat`
+  - On Debian-based Linuces, `apt-get install libusb-dev`
 * Python
 
 After unpacking the source, build with `cmake . && make`. This will build both
