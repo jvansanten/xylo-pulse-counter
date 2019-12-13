@@ -34,14 +34,14 @@ pycounter_new(PyTypeObject* type, PyObject* args, PyObject* kwds){
 }
 
 static PyObject*
-pycounter_count(pycounter* self, PyObject* args, PyObject* kwds){
+pycounter_count(pycounter* self){
 	
 	count_statistics counts = self->data->count();
 	return Py_BuildValue("Oi", Py_BuildValue("iiii", counts.counts[0], counts.counts[1], counts.counts[2], counts.counts[2]), counts.cycles);
 }
 
 static PyMethodDef pycounter_methods[] = {
-	{"count", (PyCFunction)pycounter_count, 0,
+	{"count", (PyCFunction)pycounter_count, METH_NOARGS,
 	 "Read out and reset the FPGA scalers\n\n"
 	 ":returns: a tuple (counts,ticks), where the `counts` are the number of\n"
 	 "          pulses detected on each channel in the last `ticks` clock\n"
